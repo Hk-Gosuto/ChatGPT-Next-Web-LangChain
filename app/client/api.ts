@@ -45,6 +45,7 @@ export interface MultimodalContent {
 export interface RequestMessage {
   role: MessageRole;
   content: string | MultimodalContent[];
+  reasoningContent?: string;
   fileInfos?: FileInfo[];
   webSearchReferences?: TavilySearchResponse;
 }
@@ -93,6 +94,7 @@ export interface ChatOptions {
 
   onToolUpdate?: (toolName: string, toolInput: string) => void;
   onUpdate?: (message: string, chunk: string) => void;
+  onReasoningUpdate?: (message: string, chunk: string) => void;
   onFinish: (message: string, responseRes: Response) => void;
   onError?: (err: Error) => void;
   onController?: (controller: AbortController) => void;

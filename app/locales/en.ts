@@ -25,6 +25,9 @@ const en: LocaleType = {
   },
   Chat: {
     SubTitle: (count: number) => `${count} messages`,
+    Thinking: {
+      Title: "Thinking",
+    },
     EditMessage: {
       Title: "Edit All Messages",
       Topic: {

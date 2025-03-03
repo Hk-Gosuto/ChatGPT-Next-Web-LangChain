@@ -147,6 +147,7 @@ import {
   WebTranscriptionApi,
 } from "../utils/speech";
 import { FileInfo } from "../client/platforms/utils";
+import { ThinkingContent } from "./thinking-content";
 
 const ttsPlayer = createTTSPlayer();
 
@@ -2151,6 +2152,7 @@ function _Chat() {
                             ))}
                           </div>
                         )}
+                        {!isUser && <ThinkingContent message={message} />}
                         <div className={styles["chat-message-item"]}>
                           <Markdown
                             key={message.streaming ? "loading" : "done"}

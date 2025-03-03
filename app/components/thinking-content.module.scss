@@ -1,0 +1,106 @@
+.thinking-container {
+  position: relative;
+  border: var(--border-in-light);
+  border-radius: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: var(--card-shadow);
+
+  .thinking-header {
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: var(--border-in-light);
+
+    .thinking-title {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--black);
+      padding: 2px 5px;
+      border-radius: 5px;
+    }
+
+    .thinking-toggle {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--black);
+      padding: 2px 5px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        text-decoration: none;
+      }
+    }
+  }
+
+  .thinking-content-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .thinking-content {
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    color: var(--black);
+    overflow-wrap: break-word;
+    scroll-behavior: smooth;
+    max-height: 50px;
+    overflow-y: hidden;
+    position: relative;
+    transition:
+      max-height 0.3s ease,
+      overflow-y 0.3s ease;
+    padding: 10px;
+
+    .thinking-content-text {
+      position: relative;
+      z-index: 0;
+    }
+
+    &.expanded {
+      overflow-y: auto;
+      max-height: 300px;
+    }
+  }
+
+  .thinking-content-top,
+  .thinking-content-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 30px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .thinking-content-top {
+    top: 0;
+    background: linear-gradient(
+      to bottom,
+      var(--white) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  .thinking-content-bottom {
+    bottom: 0;
+    background: linear-gradient(
+      to top,
+      var(--white) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+}

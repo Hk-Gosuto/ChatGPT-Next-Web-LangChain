@@ -388,6 +388,8 @@ export function streamWithThink(
 ) {
   let responseText = "";
   let remainText = "";
+  let reasoningResponseText = "";
+  let reasoningRemainText = "";
   let finished = false;
   let running = false;
   let runTools: any[] = [];
@@ -412,6 +414,19 @@ export function streamWithThink(
       responseText += fetchText;
       remainText = remainText.slice(fetchCount);
       options.onUpdate?.(responseText, fetchText);
+    }
+
+    if (reasoningRemainText.length > 0) {
+      const fetchCount = Math.max(
+        1,
+        Math.round(reasoningRemainText.length / 60),
+      );
+      const fetchText = reasoningRemainText.slice(0, fetchCount);
+      reasoningResponseText += fetchText;
+      // 删除空行
+      reasoningResponseText = reasoningResponseText.replace(/^\s*\n/gm, "");
+      reasoningRemainText = reasoningRemainText.slice(fetchCount);
+      options.onReasoningUpdate?.(reasoningResponseText, fetchText);
     }
 
     requestAnimationFrame(animateResponseText);
@@ -582,28 +597,24 @@ export function streamWithThink(
             if (!isInThinkingMode || isThinkingChanged) {
               // If this is a new thinking block or mode changed, add prefix
               isInThinkingMode = true;
-              if (remainText.length > 0) {
-                remainText += "\n";
-              }
-              remainText += "> " + chunk.content;
+              // if (remainText.length > 0) {
+              //   remainText += "\n";
+              // }
+              // Add thinking prefix with timestamp
+              // const timestamp = new Date().toISOString().substr(11, 8); // HH:MM:SS format
+              // remainText += `> [${timestamp}] ` + chunk.content;
+              reasoningRemainText += chunk.content;
             } else {
               // Handle newlines in thinking content
-              if (chunk.content.includes("\n\n")) {
-                const lines = chunk.content.split("\n\n");
-                remainText += lines.join("\n\n> ");
-              } else {
-                remainText += chunk.content;
-              }
+              reasoningRemainText += chunk.content;
             }
           } else {
             // If in normal mode
             if (isInThinkingMode || isThinkingChanged) {
               // If switching from thinking mode to normal mode
               isInThinkingMode = false;
-              remainText += "\n\n" + chunk.content;
-            } else {
-              remainText += chunk.content;
             }
+            remainText += chunk.content;
           }
         } catch (e) {
           console.error("[Request] parse error", text, msg, e);
