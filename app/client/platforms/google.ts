@@ -25,12 +25,12 @@ import { getClientConfig } from "@/app/config/client";
 import { GEMINI_BASE_URL } from "@/app/constant";
 
 import {
-  getMessageTextContent,
   getMessageImages,
   isVisionModel,
   getWebReferenceMessageTextContent,
+  getTimeoutMSByModel,
+  isImageGenerationModel,
 } from "@/app/utils";
-import { preProcessImageContent } from "@/app/utils/chat";
 import { nanoid } from "nanoid";
 import { RequestPayload } from "./openai";
 import { fetch } from "@/app/utils/stream";
@@ -73,6 +73,15 @@ export class GeminiProApi implements LLMApi {
   }
   extractMessage(res: any) {
     console.log("[Response] gemini-pro response: ", res);
+
+    if (!res?.candidates?.at(0)?.content?.parts) return "";
+
+    if (res?.candidates?.at(0)?.content?.parts.at(0)?.inlineData)
+      return {
+        mimeType: res?.candidates?.at(0)?.content?.parts.at(0)?.inlineData
+          .mimeType,
+        data: res?.candidates?.at(0)?.content?.parts.at(0)?.inlineData.data,
+      };
 
     return (
       res?.candidates?.at(0)?.content?.parts.at(0)?.text ||
@@ -155,6 +164,7 @@ export class GeminiProApi implements LLMApi {
         temperature: modelConfig.temperature,
         maxOutputTokens: modelConfig.max_tokens,
         topP: modelConfig.top_p,
+        responseModalities: ["Text"],
         // "topK": modelConfig.top_k,
       },
       safetySettings: [
@@ -177,6 +187,10 @@ export class GeminiProApi implements LLMApi {
       ],
     };
 
+    if (isImageGenerationModel(options.config.model)) {
+      requestPayload.generationConfig.responseModalities = ["Text", "Image"];
+    }
+
     let shouldStream = !!options.config.stream;
     const controller = new AbortController();
     options.onController?.(controller);
@@ -194,7 +208,7 @@ export class GeminiProApi implements LLMApi {
       // make a fetch request
       const requestTimeoutId = setTimeout(
         () => controller.abort(),
-        REQUEST_TIMEOUT_MS,
+        getTimeoutMSByModel(options.config.model),
       );
 
       if (shouldStream) {
@@ -204,7 +218,7 @@ export class GeminiProApi implements LLMApi {
         //   .getAsTools(
         //     useChatStore.getState().currentSession().mask?.plugin || [],
         //   );
-        return stream(
+        return await stream(
           chatPath,
           requestPayload,
           getHeaders(),
@@ -220,6 +234,8 @@ export class GeminiProApi implements LLMApi {
             // console.log("parseSSE", text, runTools);
             const chunkJson = JSON.parse(text);
 
+            if (!chunkJson?.candidates?.at(0)?.content.parts) return undefined;
+
             const functionCall = chunkJson?.candidates
               ?.at(0)
               ?.content.parts.at(0)?.functionCall;
@@ -234,7 +250,8 @@ export class GeminiProApi implements LLMApi {
                 },
               });
             }
-            return chunkJson?.candidates?.at(0)?.content.parts.at(0)?.text;
+            const message = apiClient.extractMessage(chunkJson);
+            return message;
           },
           // processToolMessage, include tool_calls message and tool call results
           (

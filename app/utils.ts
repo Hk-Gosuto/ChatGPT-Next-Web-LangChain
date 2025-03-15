@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { showToast } from "./components/ui-lib";
 import Locale, { getLang } from "./locales";
-import { RequestMessage } from "./client/api";
+import { MultimodalContent, RequestMessage } from "./client/api";
 import {
   DEFAULT_MODELS,
   REQUEST_TIMEOUT_MS,
+  REQUEST_TIMEOUT_MS_FOR_IMAGE_GENERATION,
   REQUEST_TIMEOUT_MS_FOR_THINKING,
 } from "./constant";
 import { ServiceProvider } from "./constant";
@@ -266,15 +267,20 @@ ${result.content}
 }
 
 export function getMessageTextContent(message: RequestMessage) {
-  if (typeof message.content === "string") {
-    return message.content;
+  return getTextContent(message.content);
+}
+
+export function getTextContent(content: string | MultimodalContent[]) {
+  if (typeof content === "string") {
+    return content;
   }
-  for (const c of message.content) {
+  let combinedText = "";
+  for (const c of content) {
     if (c.type === "text") {
-      return c.text ?? "";
+      combinedText += (c.text ?? "") + " ";
     }
   }
-  return "";
+  return combinedText.trim();
 }
 
 export function getMessageTextContentWithoutThinking(message: RequestMessage) {
@@ -348,6 +354,9 @@ export function isDalle3(model: string) {
 
 export function getTimeoutMSByModel(model: string) {
   model = model.toLowerCase();
+  if (model.startsWith("gemini-2.0-flash-exp")) {
+    return REQUEST_TIMEOUT_MS_FOR_IMAGE_GENERATION;
+  }
   if (
     model.startsWith("dall-e") ||
     model.startsWith("dalle") ||
@@ -439,6 +448,11 @@ export function isClaudeThinkingModel(modelName: string) {
     "claude-3-7-sonnet-20250219",
     "claude-3-7-sonnet-latest",
   ];
+  return specialModels.some((keyword) => modelName === keyword);
+}
+
+export function isImageGenerationModel(modelName: string) {
+  const specialModels = ["gemini-2.0-flash-exp"];
   return specialModels.some((keyword) => modelName === keyword);
 }
 

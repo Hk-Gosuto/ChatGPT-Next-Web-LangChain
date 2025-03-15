@@ -34,6 +34,16 @@ export const Models = ["gpt-3.5-turbo", "gpt-4"] as const;
 export const TTSModels = ["tts-1", "tts-1-hd"] as const;
 export type ChatModel = ModelType;
 
+export interface MessageContentItem {
+  type: "text" | "image";
+  content: string | ImageContent;
+}
+
+export interface ImageContent {
+  mimeType: string;
+  data: string;
+}
+
 export interface MultimodalContent {
   type: "text" | "image_url";
   text?: string;
@@ -93,9 +103,12 @@ export interface ChatOptions {
   config: LLMConfig;
 
   onToolUpdate?: (toolName: string, toolInput: string) => void;
-  onUpdate?: (message: string, chunk: string) => void;
+  onUpdate?: (message: string | MultimodalContent[], chunk: string) => void;
   onReasoningUpdate?: (message: string, chunk: string) => void;
-  onFinish: (message: string, responseRes: Response) => void;
+  onFinish: (
+    message: string | MultimodalContent[],
+    responseRes: Response,
+  ) => void;
   onError?: (err: Error) => void;
   onController?: (controller: AbortController) => void;
   onBeforeTool?: (tool: ChatMessageTool) => void;

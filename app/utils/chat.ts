@@ -3,7 +3,12 @@ import {
   UPLOAD_URL,
   REQUEST_TIMEOUT_MS,
 } from "@/app/constant";
-import { RequestMessage } from "@/app/client/api";
+import {
+  ImageContent,
+  MultimodalContent,
+  RequestMessage,
+  MessageContentItem,
+} from "@/app/client/api";
 import Locale from "@/app/locales";
 import {
   EventStreamContentType,
@@ -165,14 +170,17 @@ export function removeImage(imageUrl: string) {
   });
 }
 
-export function stream(
+export async function stream(
   chatPath: string,
   requestPayload: any,
   headers: any,
   tools: any[],
   funcs: Record<string, Function>,
   controller: AbortController,
-  parseSSE: (text: string, runTools: any[]) => string | undefined,
+  parseSSE: (
+    text: string,
+    runTools: any[],
+  ) => string | ImageContent | undefined,
   processToolMessage: (
     requestPayload: any,
     toolCallMessage: any,
@@ -185,31 +193,67 @@ export function stream(
   let finished = false;
   let running = false;
   let runTools: any[] = [];
+  let contentQueue: MessageContentItem[] = [];
+  let multimodalTextContent: MultimodalContent = { type: "text", text: "" };
+  let multimodalContent: MultimodalContent[] = [multimodalTextContent];
+  let imageContext: ImageContent | null = null;
 
   // animate response to make it looks smooth
-  function animateResponseText() {
-    if (finished || controller.signal.aborted) {
-      responseText += remainText;
-      console.log("[Response Animation] finished");
-      if (responseText?.length === 0) {
-        options.onError?.(new Error("empty response from server"));
+  async function animateResponseText() {
+    if (contentQueue.length > 0) {
+      const chunk = contentQueue.shift();
+      if (chunk?.type === "text") {
+        remainText += chunk.content;
+      } else if (chunk?.type === "image") {
+        imageContext = chunk.content as ImageContent;
       }
-      return;
     }
-
     if (remainText.length > 0) {
       const fetchCount = Math.max(1, Math.round(remainText.length / 60));
       const fetchText = remainText.slice(0, fetchCount);
-      responseText += fetchText;
+      // responseText += fetchText;
+      multimodalTextContent.text += fetchText;
       remainText = remainText.slice(fetchCount);
-      options.onUpdate?.(responseText, fetchText);
+    }
+    if (imageContext) {
+      multimodalContent.push({
+        type: "image_url",
+        image_url: {
+          url: await uploadImage(
+            base64Image2Blob(imageContext.data, imageContext.mimeType),
+          ),
+        },
+      });
+      imageContext = null;
+      let newMultimodalTextContent: MultimodalContent = {
+        type: "text",
+        text: "",
+      };
+      multimodalTextContent = newMultimodalTextContent;
+      multimodalContent.push(newMultimodalTextContent);
+    }
+    options.onUpdate?.(multimodalContent, "");
+
+    if ((finished || controller.signal.aborted) && contentQueue.length === 0) {
+      multimodalTextContent.text += remainText;
+      options.onUpdate?.(multimodalContent, "");
+      console.log("[Response Animation] finished");
+      if (
+        responseText?.length === 0 &&
+        multimodalContent.at(0)?.text?.length == 0 &&
+        multimodalContent.length == 1
+      ) {
+        options.onError?.(new Error("empty response from server"));
+      }
+      options.onFinish(multimodalContent);
+      return;
     }
 
     requestAnimationFrame(animateResponseText);
   }
 
   // start animaion
-  animateResponseText();
+  await animateResponseText();
 
   const finish = () => {
     if (!finished) {
@@ -273,7 +317,7 @@ export function stream(
       }
       console.debug("[ChatAPI] end");
       finished = true;
-      options.onFinish(responseText + remainText);
+      options.onFinish(multimodalContent);
     }
   };
 
@@ -344,8 +388,17 @@ export function stream(
         const text = msg.data;
         try {
           const chunk = parseSSE(msg.data, runTools);
-          if (chunk) {
-            remainText += chunk;
+          console.log("chunk", chunk);
+          if (chunk && typeof chunk === "string") {
+            contentQueue.push({
+              type: "text",
+              content: chunk,
+            });
+          } else if (chunk) {
+            contentQueue.push({
+              type: "image",
+              content: chunk,
+            });
           }
         } catch (e) {
           console.error("[Request] parse error", text, msg, e);
