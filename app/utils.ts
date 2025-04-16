@@ -331,6 +331,9 @@ export function isVisionModel(model: string) {
     "gpt-4o-mini",
     "gpt-4.5-preview",
     "gpt-4.5-preview-2025-02-27",
+    "gpt-4.1",
+    "gpt-4.1-mini",
+    "gpt-4.1-nano",
   ];
 
   var googleModels = DEFAULT_MODELS.filter(
