@@ -379,6 +379,8 @@ const openaiModels = [
 
 const googleModels = [
   // https://ai.google.dev/gemini-api/docs/models/gemini?hl=zh-cn
+  "gemini-2.5-flash-preview-04-17",
+  "gemini-2.5-pro-preview-03-25	",
   "gemini-2.0-flash",
   "gemini-2.0-flash-lite-preview-02-05",
   "gemini-1.5-flash",
