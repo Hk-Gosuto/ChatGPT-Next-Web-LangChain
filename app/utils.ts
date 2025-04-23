@@ -348,9 +348,18 @@ export function isVisionModel(model: string) {
   return (
     visionKeywords.some((keyword) => model.includes(keyword)) ||
     isGpt4Turbo ||
-    isDalle3(model) ||
+    isOpenAIImageGenerationModel(model) ||
     googleModels.some((keyword) => model.includes(keyword))
   );
+}
+
+export function isOpenAIImageGenerationModel(model: string) {
+  const specialModels = ["dall-e-3", "gpt-image-1"];
+  return specialModels.some((keyword) => model === keyword);
+}
+
+export function isGPTImageModel(model: string) {
+  return "gpt-image-1" === model;
 }
 
 export function isDalle3(model: string) {
@@ -411,7 +420,7 @@ export function isSupportRAGModel(modelName: string) {
 }
 
 export function isFunctionCallModel(modelName: string) {
-  if (isDalle3(modelName)) {
+  if (isOpenAIImageGenerationModel(modelName)) {
     return false;
   }
   const specialModels = [

@@ -57,6 +57,7 @@ import SearchCloseIcon from "../icons/search_close.svg";
 import SearchOpenIcon from "../icons/search_open.svg";
 import EnableThinkingIcon from "../icons/thinking_enable.svg";
 import DisableThinkingIcon from "../icons/thinking_disable.svg";
+import BackgroundIcon from "../icons/background.svg";
 import {
   ChatMessage,
   SubmitKey,
@@ -79,13 +80,15 @@ import {
   getMessageTextContent,
   getMessageImages,
   isVisionModel,
-  isDalle3,
+  isOpenAIImageGenerationModel,
   showPlugins,
   safeLocalStorage,
   isSupportRAGModel,
   isFunctionCallModel,
   isFirefox,
   isClaudeThinkingModel,
+  isGPTImageModel,
+  isDalle3,
 } from "../utils";
 
 import { uploadImage as uploadImageRemote } from "@/app/utils/chat";
@@ -93,7 +96,14 @@ import { uploadImage as uploadImageRemote } from "@/app/utils/chat";
 import dynamic from "next/dynamic";
 
 import { ChatControllerPool } from "../client/controller";
-import { DalleSize, DalleQuality, DalleStyle } from "../typing";
+import {
+  DalleSize,
+  DalleQuality,
+  DalleStyle,
+  GPTImageQuality,
+  GPTImageSize,
+  GPTImageBackground,
+} from "../typing";
 import { Prompt, usePromptStore } from "../store/prompt";
 import Locale from "../locales";
 
@@ -603,12 +613,26 @@ export function ChatActions(props: {
   const [showSizeSelector, setShowSizeSelector] = useState(false);
   const [showQualitySelector, setShowQualitySelector] = useState(false);
   const [showStyleSelector, setShowStyleSelector] = useState(false);
+  const [showBackgroundSelector, setShowBackgroundSelector] = useState(false);
   const dalle3Sizes: DalleSize[] = ["1024x1024", "1792x1024", "1024x1792"];
   const dalle3Qualitys: DalleQuality[] = ["standard", "hd"];
+  const gptImageSizes: GPTImageSize[] = [
+    "auto",
+    "1024x1024",
+    "1536x1024",
+    "1024x1536",
+  ];
+  const gptImageQualitys: GPTImageQuality[] = ["auto", "high", "medium", "low"];
+  const gptImageBackgrounds: GPTImageBackground[] = [
+    "auto",
+    "transparent",
+    "opaque",
+  ];
   const dalle3Styles: DalleStyle[] = ["vivid", "natural"];
   const currentSize = session.mask.modelConfig?.size ?? "1024x1024";
   const currentQuality = session.mask.modelConfig?.quality ?? "standard";
   const currentStyle = session.mask.modelConfig?.style ?? "vivid";
+  const currentBackground = session.mask.modelConfig?.background ?? "auto";
 
   const isMobileScreen = useMobileScreen();
 
@@ -628,6 +652,25 @@ export function ChatActions(props: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+
+  useEffect(() => {
+    if (isGPTImageModel(currentModel)) {
+      chatStore.updateTargetSession(session, (session) => {
+        session.mask.modelConfig.size = "auto";
+        session.mask.modelConfig.quality = "auto";
+        session.mask.modelConfig.style = undefined;
+        session.mask.modelConfig.background = "auto";
+      });
+    }
+    if (isDalle3(currentModel)) {
+      chatStore.updateTargetSession(session, (session) => {
+        session.mask.modelConfig.size = "1024x1024";
+        session.mask.modelConfig.quality = "standard";
+        session.mask.modelConfig.style = "vivid";
+        session.mask.modelConfig.background = undefined;
+      });
+    }
+  }, [currentModel]);
 
   useEffect(() => {
     const show = isVisionModel(currentModel);
@@ -759,17 +802,19 @@ export function ChatActions(props: {
           icon={<RobotIcon />}
         />
 
-        {!isFunctionCallModel(currentModel) && isEnableWebSearch && (
-          <ChatAction
-            onClick={switchWebSearch}
-            text={
-              webSearch
-                ? Locale.Chat.InputActions.CloseWebSearch
-                : Locale.Chat.InputActions.OpenWebSearch
-            }
-            icon={webSearch ? <SearchOpenIcon /> : <SearchCloseIcon />}
-          />
-        )}
+        {!isFunctionCallModel(currentModel) &&
+          isEnableWebSearch &&
+          !isOpenAIImageGenerationModel(currentModel) && (
+            <ChatAction
+              onClick={switchWebSearch}
+              text={
+                webSearch
+                  ? Locale.Chat.InputActions.CloseWebSearch
+                  : Locale.Chat.InputActions.OpenWebSearch
+              }
+              icon={webSearch ? <SearchOpenIcon /> : <SearchCloseIcon />}
+            />
+          )}
 
         {isClaudeThinkingModel(currentModel) && (
           <ChatAction
@@ -820,7 +865,7 @@ export function ChatActions(props: {
           />
         )}
 
-        {isDalle3(currentModel) && (
+        {isOpenAIImageGenerationModel(currentModel) && (
           <ChatAction
             onClick={() => setShowSizeSelector(true)}
             text={currentSize}
@@ -831,10 +876,17 @@ export function ChatActions(props: {
         {showSizeSelector && (
           <Selector
             defaultSelectedValue={currentSize}
-            items={dalle3Sizes.map((m) => ({
-              title: m,
-              value: m,
-            }))}
+            items={
+              isGPTImageModel(currentModel)
+                ? gptImageSizes.map((m) => ({
+                    title: m,
+                    value: m,
+                  }))
+                : dalle3Sizes.map((m) => ({
+                    title: m,
+                    value: m,
+                  }))
+            }
             onClose={() => setShowSizeSelector(false)}
             onSelection={(s) => {
               if (s.length === 0) return;
@@ -847,7 +899,7 @@ export function ChatActions(props: {
           />
         )}
 
-        {isDalle3(currentModel) && (
+        {isOpenAIImageGenerationModel(currentModel) && (
           <ChatAction
             onClick={() => setShowQualitySelector(true)}
             text={currentQuality}
@@ -858,10 +910,17 @@ export function ChatActions(props: {
         {showQualitySelector && (
           <Selector
             defaultSelectedValue={currentQuality}
-            items={dalle3Qualitys.map((m) => ({
-              title: m,
-              value: m,
-            }))}
+            items={
+              isGPTImageModel(currentModel)
+                ? gptImageQualitys.map((m) => ({
+                    title: m,
+                    value: m,
+                  }))
+                : dalle3Qualitys.map((m) => ({
+                    title: m,
+                    value: m,
+                  }))
+            }
             onClose={() => setShowQualitySelector(false)}
             onSelection={(q) => {
               if (q.length === 0) return;
@@ -874,7 +933,34 @@ export function ChatActions(props: {
           />
         )}
 
-        {isDalle3(currentModel) && (
+        {isGPTImageModel(currentModel) && (
+          <ChatAction
+            onClick={() => setShowBackgroundSelector(true)}
+            text={currentBackground}
+            icon={<BackgroundIcon />}
+          />
+        )}
+
+        {showBackgroundSelector && (
+          <Selector
+            defaultSelectedValue={currentBackground}
+            items={gptImageBackgrounds.map((m) => ({
+              title: m,
+              value: m,
+            }))}
+            onClose={() => setShowBackgroundSelector(false)}
+            onSelection={(b) => {
+              if (b.length === 0) return;
+              const background = b[0];
+              chatStore.updateTargetSession(session, (session) => {
+                session.mask.modelConfig.background = background;
+              });
+              showToast(background);
+            }}
+          />
+        )}
+
+        {!isGPTImageModel(currentModel) && (
           <ChatAction
             onClick={() => setShowStyleSelector(true)}
             text={currentStyle}
@@ -882,7 +968,7 @@ export function ChatActions(props: {
           />
         )}
 
-        {showStyleSelector && (
+        {!isGPTImageModel(currentModel) && showStyleSelector && (
           <Selector
             defaultSelectedValue={currentStyle}
             items={dalle3Styles.map((m) => ({

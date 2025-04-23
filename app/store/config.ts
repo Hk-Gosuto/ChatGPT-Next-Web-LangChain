@@ -1,5 +1,12 @@
 import { LLMModel } from "../client/api";
-import { DalleSize, DalleQuality, DalleStyle } from "../typing";
+import {
+  DalleSize,
+  DalleQuality,
+  DalleStyle,
+  GPTImageQuality,
+  GPTImageSize,
+  GPTImageBackground,
+} from "../typing";
 import { getClientConfig } from "../config/client";
 import {
   DEFAULT_INPUT_TEMPLATE,
@@ -83,9 +90,10 @@ export const DEFAULT_CONFIG = {
     compressProviderName: "",
     enableInjectSystemPrompts: true,
     template: config?.template ?? DEFAULT_INPUT_TEMPLATE,
-    size: "1024x1024" as DalleSize,
-    quality: "standard" as DalleQuality,
-    style: "vivid" as DalleStyle,
+    size: "1024x1024" as DalleSize | GPTImageSize,
+    quality: "standard" as DalleQuality | GPTImageQuality,
+    style: "vivid" as DalleStyle | undefined,
+    background: "auto" as GPTImageBackground | undefined,
   },
 
   pluginConfig: {

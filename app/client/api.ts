@@ -11,7 +11,11 @@ import {
   useAccessStore,
   useChatStore,
 } from "../store";
-import { ChatGPTApi, DalleRequestPayload } from "./platforms/openai";
+import {
+  ChatGPTApi,
+  DalleRequestPayload,
+  GPTImageRequestPayload,
+} from "./platforms/openai";
 import { FileApi, FileInfo } from "./platforms/utils";
 import { GeminiProApi } from "./platforms/google";
 import { ClaudeApi } from "./platforms/anthropic";
@@ -68,9 +72,10 @@ export interface LLMConfig {
   stream?: boolean;
   presence_penalty?: number;
   frequency_penalty?: number;
-  size?: DalleRequestPayload["size"];
-  quality?: DalleRequestPayload["quality"];
-  style?: DalleRequestPayload["style"];
+  size?: DalleRequestPayload["size"] | GPTImageRequestPayload["size"];
+  quality?: DalleRequestPayload["quality"] | GPTImageRequestPayload["quality"];
+  style?: DalleRequestPayload["style"] | undefined;
+  background?: GPTImageRequestPayload["background"] | undefined;
 }
 
 export interface LLMAgentConfig {
