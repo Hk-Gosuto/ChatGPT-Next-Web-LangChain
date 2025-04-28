@@ -246,7 +246,7 @@ export class ChatGPTApi implements LLMApi {
       | GPTImageRequestPayload;
 
     const isImageGenModel = isOpenAIImageGenerationModel(options.config.model);
-    const isO1Series =
+    const isOSeries =
       options.config.model.startsWith("o1") ||
       options.config.model.startsWith("o3") ||
       options.config.model.startsWith("o4");
