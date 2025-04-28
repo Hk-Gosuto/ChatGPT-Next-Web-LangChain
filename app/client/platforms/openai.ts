@@ -249,7 +249,7 @@ export class ChatGPTApi implements LLMApi {
     const isO1Series =
       options.config.model.startsWith("o1") ||
       options.config.model.startsWith("o3") ||
-      options.config.model.startsWith("o4") ||;
+      options.config.model.startsWith("o4");
 
     if (isImageGenModel) {
       const prompt = getMessageTextContent(
