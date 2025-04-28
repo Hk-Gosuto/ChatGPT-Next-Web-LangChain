@@ -336,6 +336,9 @@ export const VISION_MODEL_REGEXES = [
   /gpt-4-turbo(?!.*preview)/, // Matches "gpt-4-turbo" but not "gpt-4-turbo-preview"
   /^dall-e-3$/, // Matches exactly "dall-e-3"
   /glm-4v/,
+  /o1/,
+  /o3/,
+  /o4/,
 ];
 
 export const EXCLUDE_VISION_MODEL_REGEXES = [/claude-3-5-haiku-20241022/];
@@ -368,14 +371,17 @@ const openaiModels = [
   "gpt-4.5-preview",
   "gpt-4.5-preview-2025-02-27",
   "dall-e-3",
+  "o1",
   "o1-mini",
   "o1-preview",
   "o1-pro",
   "o3-mini",
+  "o3",
   "gpt-4.1",
   "gpt-4.1-mini",
   "gpt-4.1-nano",
   "gpt-image-1",
+  "o4-mini",
 ];
 
 const googleModels = [
