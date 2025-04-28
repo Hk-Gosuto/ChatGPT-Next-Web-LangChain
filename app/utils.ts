@@ -336,6 +336,9 @@ export function isVisionModel(model: string) {
     "gpt-4.1",
     "gpt-4.1-mini",
     "gpt-4.1-nano",
+    "o1",
+    "o3",
+    "o4-mini",
   ];
 
   var googleModels = DEFAULT_MODELS.filter(
@@ -376,6 +379,7 @@ export function getTimeoutMSByModel(model: string) {
     model.startsWith("dalle") ||
     model.startsWith("o1") ||
     model.startsWith("o3") ||
+    model.startsWith("o4") ||
     model.includes("deepseek-r") ||
     model.includes("-thinking")
   )
@@ -450,10 +454,13 @@ export function isFunctionCallModel(modelName: string) {
     "claude-3-5-haiku-latest",
     "claude-3-7-sonnet-20250219",
     "claude-3-7-sonnet-latest",
+    "o1",
+    "o3",
+    "gpt-4.1",
   ];
   if (specialModels.some((keyword) => modelName === keyword)) return true;
   return DEFAULT_MODELS.filter(
-    (model) => model.provider.id === "openai" && !model.name.includes("o1"),
+    (model) => model.provider.id === "openai" && !model.name.includes("o2"),
   ).some((model) => model.name === modelName);
 }
 
