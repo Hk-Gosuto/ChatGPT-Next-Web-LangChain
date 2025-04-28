@@ -460,7 +460,7 @@ export function isFunctionCallModel(modelName: string) {
   ];
   if (specialModels.some((keyword) => modelName === keyword)) return true;
   return DEFAULT_MODELS.filter(
-    (model) => model.provider.id === "openai" && !model.name.includes("o2"),
+    (model) => model.provider.id === "openai" && !model.name.includes("o4-mini"),
   ).some((model) => model.name === modelName);
 }
 
