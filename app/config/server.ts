@@ -134,6 +134,7 @@ export const getServerSideConfig = () => {
   const disableGPT4 = !!process.env.DISABLE_GPT4;
   let customModels = process.env.CUSTOM_MODELS ?? "";
   let defaultModel = process.env.DEFAULT_MODEL ?? "";
+  let visionModels = process.env.VISION_MODELS ?? "";
 
   if (disableGPT4) {
     if (customModels) customModels += ",";
@@ -267,6 +268,7 @@ export const getServerSideConfig = () => {
     disableFastLink: !!process.env.DISABLE_FAST_LINK,
     customModels,
     defaultModel,
+    visionModels,
     allowedWebDavEndpoints,
 
     isStoreFileToLocal:

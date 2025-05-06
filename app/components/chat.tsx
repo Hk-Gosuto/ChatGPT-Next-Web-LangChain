@@ -960,32 +960,35 @@ export function ChatActions(props: {
           />
         )}
 
-        {!isGPTImageModel(currentModel) && (
-          <ChatAction
-            onClick={() => setShowStyleSelector(true)}
-            text={currentStyle}
-            icon={<StyleIcon />}
-          />
-        )}
+        {!isGPTImageModel(currentModel) &&
+          isOpenAIImageGenerationModel(currentModel) && (
+            <ChatAction
+              onClick={() => setShowStyleSelector(true)}
+              text={currentStyle}
+              icon={<StyleIcon />}
+            />
+          )}
 
-        {!isGPTImageModel(currentModel) && showStyleSelector && (
-          <Selector
-            defaultSelectedValue={currentStyle}
-            items={dalle3Styles.map((m) => ({
-              title: m,
-              value: m,
-            }))}
-            onClose={() => setShowStyleSelector(false)}
-            onSelection={(s) => {
-              if (s.length === 0) return;
-              const style = s[0];
-              chatStore.updateTargetSession(session, (session) => {
-                session.mask.modelConfig.style = style;
-              });
-              showToast(style);
-            }}
-          />
-        )}
+        {!isGPTImageModel(currentModel) &&
+          isOpenAIImageGenerationModel(currentModel) &&
+          showStyleSelector && (
+            <Selector
+              defaultSelectedValue={currentStyle}
+              items={dalle3Styles.map((m) => ({
+                title: m,
+                value: m,
+              }))}
+              onClose={() => setShowStyleSelector(false)}
+              onSelection={(s) => {
+                if (s.length === 0) return;
+                const style = s[0];
+                chatStore.updateTargetSession(session, (session) => {
+                  session.mask.modelConfig.style = style;
+                });
+                showToast(style);
+              }}
+            />
+          )}
 
         {/* {showPlugins(currentProviderName, currentModel) && (
           <ChatAction

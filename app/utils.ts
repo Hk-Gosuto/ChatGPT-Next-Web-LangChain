@@ -4,9 +4,11 @@ import Locale, { getLang } from "./locales";
 import { MultimodalContent, RequestMessage } from "./client/api";
 import {
   DEFAULT_MODELS,
+  EXCLUDE_VISION_MODEL_REGEXES,
   REQUEST_TIMEOUT_MS,
   REQUEST_TIMEOUT_MS_FOR_IMAGE_GENERATION,
   REQUEST_TIMEOUT_MS_FOR_THINKING,
+  VISION_MODEL_REGEXES,
 } from "./constant";
 import { ServiceProvider } from "./constant";
 // import { fetch as tauriFetch, ResponseType } from "@tauri-apps/api/http";
@@ -15,6 +17,7 @@ import {
   WEB_SEARCH_ANSWER_EN_PROMPT,
   WEB_SEARCH_ANSWER_ZH_PROMPT,
 } from "./prompt";
+import { useAccessStore } from "./store";
 
 export function trimTopic(topic: string) {
   // Fix an issue where double quotes still show in the Indonesian language
@@ -319,40 +322,14 @@ export function getMessageImages(message: RequestMessage): string[] {
 }
 
 export function isVisionModel(model: string) {
-  // Note: This is a better way using the TypeScript feature instead of `&&` or `||` (ts v5.5.0-dev.20240314 I've been using)
-
-  const visionKeywords = [
-    "vision",
-    "claude-3",
-    "gemini-1.5-pro",
-    "gemini-1.5-flash",
-    "gemini-exp-1114",
-    "gemini-2.5-flash-preview-04-17",
-    "gemini-2.5-pro-preview-03-25	",
-    "gpt-4o",
-    "gpt-4o-mini",
-    "gpt-4.5-preview",
-    "gpt-4.5-preview-2025-02-27",
-    "gpt-4.1",
-    "gpt-4.1-mini",
-    "gpt-4.1-nano",
-    "o1",
-    "o3",
-    "o4-mini",
-  ];
-
-  var googleModels = DEFAULT_MODELS.filter(
-    (model) => model.provider.id === "google",
-  ).map((model) => model.name);
-
-  const isGpt4Turbo =
-    model.includes("gpt-4-turbo") && !model.includes("preview");
-
+  const visionModels = useAccessStore.getState().visionModels;
+  const envVisionModels = visionModels?.split(",").map((m) => m.trim());
+  if (envVisionModels?.includes(model)) {
+    return true;
+  }
   return (
-    visionKeywords.some((keyword) => model.includes(keyword)) ||
-    isGpt4Turbo ||
-    isOpenAIImageGenerationModel(model) ||
-    googleModels.some((keyword) => model.includes(keyword))
+    !EXCLUDE_VISION_MODEL_REGEXES.some((regex) => regex.test(model)) &&
+    VISION_MODEL_REGEXES.some((regex) => regex.test(model))
   );
 }
 
@@ -460,7 +437,8 @@ export function isFunctionCallModel(modelName: string) {
   ];
   if (specialModels.some((keyword) => modelName === keyword)) return true;
   return DEFAULT_MODELS.filter(
-    (model) => model.provider.id === "openai" && !model.name.includes("o4-mini"),
+    (model) =>
+      model.provider.id === "openai" && !model.name.includes("o4-mini"),
   ).some((model) => model.name === modelName);
 }
 

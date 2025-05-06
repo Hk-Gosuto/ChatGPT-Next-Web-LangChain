@@ -15,6 +15,7 @@ const DANGER_CONFIG = {
   customModels: serverConfig.customModels,
   isEnableRAG: serverConfig.isEnableRAG,
   defaultModel: serverConfig.defaultModel,
+  visionModels: serverConfig.visionModels,
   edgeTTSVoiceName: serverConfig.edgeTTSVoiceName,
   isUseOpenAIEndpointForAllModels: serverConfig.isUseOpenAIEndpointForAllModels,
   disableModelProviderDisplay: serverConfig.disableModelProviderDisplay,

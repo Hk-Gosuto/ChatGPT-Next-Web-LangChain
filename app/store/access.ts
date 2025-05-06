@@ -158,78 +158,60 @@ export const useAccessStore = createPersistStore(
   (set, get) => ({
     enabledAccessControl() {
       this.fetch();
-
       return get().needCode;
     },
-
+    getVisionModels() {
+      this.fetch();
+      return get().visionModels;
+    },
     isDisableModelProviderDisplay() {
       this.fetch();
-
       return get().disableModelProviderDisplay;
     },
-
     useOpenAIEndpointForAllModels() {
       this.fetch();
-
       return get().isUseOpenAIEndpointForAllModels;
     },
-
     useRemoteModels() {
       this.fetch();
-
       return get().isUseRemoteModels;
     },
-
     edgeVoiceName() {
       this.fetch();
-
       return get().edgeTTSVoiceName;
     },
-
     enableRAG() {
       this.fetch();
-
       return get().isEnableRAG;
     },
-
     enableWebSearch() {
       this.fetch();
-
       return get().isEnableWebSearch;
     },
-
     isValidOpenAI() {
       return ensure(get(), ["openaiApiKey"]);
     },
-
     isValidAzure() {
       return ensure(get(), ["azureUrl", "azureApiKey", "azureApiVersion"]);
     },
-
     isValidGoogle() {
       return ensure(get(), ["googleApiKey"]);
     },
-
     isValidAnthropic() {
       return ensure(get(), ["anthropicApiKey"]);
     },
-
     isValidBaidu() {
       return ensure(get(), ["baiduApiKey", "baiduSecretKey"]);
     },
-
     isValidByteDance() {
       return ensure(get(), ["bytedanceApiKey"]);
     },
-
     isValidAlibaba() {
       return ensure(get(), ["alibabaApiKey"]);
     },
-
     isValidTencent() {
       return ensure(get(), ["tencentSecretKey", "tencentSecretId"]);
     },
-
     isValidMoonshot() {
       return ensure(get(), ["moonshotApiKey"]);
     },
@@ -250,7 +232,6 @@ export const useAccessStore = createPersistStore(
     },
     isAuthorized() {
       this.fetch();
-
       // has token or has code or disabled access control
       return (
         this.isValidOpenAI() ||
@@ -289,7 +270,6 @@ export const useAccessStore = createPersistStore(
             DEFAULT_CONFIG.modelConfig.model = model;
             DEFAULT_CONFIG.modelConfig.providerName = providerName as any;
           }
-
           return res;
         })
         .then((res: DangerConfig) => {
