@@ -347,7 +347,7 @@ export const VISION_MODEL_REGEXES = [
   /o4-mini/,
 ];
 
-export const EXCLUDE_VISION_MODEL_REGEXES = [];
+export const EXCLUDE_VISION_MODEL_REGEXES = [/claude-2/];
 
 export const DEFAULT_STT_ENGINE = "WebAPI";
 export const DEFAULT_STT_ENGINES = ["WebAPI", "OpenAI Whisper"];
