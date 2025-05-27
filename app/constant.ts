@@ -332,7 +332,7 @@ export const VISION_MODEL_REGEXES = [
   /gpt-4\.1-nano/,
   /gpt-4\.5-preview/,
   /gpt-4\.5-preview-2025-02-27/,
-  /claude-3/,
+  /claude/,
   /gemini-(.*)/,
   /learnlm/,
   /qwen-vl/,
@@ -347,7 +347,7 @@ export const VISION_MODEL_REGEXES = [
   /o4-mini/,
 ];
 
-export const EXCLUDE_VISION_MODEL_REGEXES = [/claude-3-5-haiku-20241022/];
+export const EXCLUDE_VISION_MODEL_REGEXES = [];
 
 export const DEFAULT_STT_ENGINE = "WebAPI";
 export const DEFAULT_STT_ENGINES = ["WebAPI", "OpenAI Whisper"];
@@ -421,6 +421,8 @@ const anthropicModels = [
   "claude-3-5-sonnet-latest",
   "claude-3-7-sonnet-20250219",
   "claude-3-7-sonnet-latest",
+  "claude-opus-4-20250514",
+  "claude-sonnet-4-20250514",
 ];
 
 const baiduModels = [
