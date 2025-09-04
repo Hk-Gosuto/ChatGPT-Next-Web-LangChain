@@ -19,7 +19,7 @@ Bifurca el proyecto en Github, luego inicia sesión en dash.cloudflare.com y ve 
 10. No modifique el "Directorio raíz".
 11. Para "Variables de entorno", haga clic en ">" y luego haga clic en "Agregar variable". Rellene la siguiente información:
 
-    *   `NODE_VERSION=20.1`
+    *   `NODE_VERSION=22`
     *   `NEXT_TELEMETRY_DISABLE=1`
     *   `OPENAI_API_KEY=你自己的API Key`
     *   `YARN_VERSION=1.22.19`

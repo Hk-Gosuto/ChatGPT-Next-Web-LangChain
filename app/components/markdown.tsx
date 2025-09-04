@@ -274,7 +274,7 @@ function tryWrapHtmlCode(text: string) {
     );
 }
 
-function _MarkDownContent(props: {
+function MarkDownContent(props: {
   content: string;
   webSearchReferences?: TavilySearchResponse;
 }) {
@@ -333,7 +333,7 @@ function _MarkDownContent(props: {
   );
 }
 
-export const MarkdownContent = React.memo(_MarkDownContent);
+export const MarkdownContent = React.memo(MarkDownContent);
 
 export function Markdown(
   props: {

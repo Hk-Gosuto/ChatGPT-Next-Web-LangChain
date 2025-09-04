@@ -17,7 +17,7 @@ GitHub でこのプロジェクトをフォークし、dash.cloudflare.com に�
 9. "Build output directory" はデフォルト値を使用し、変更しない。
 10. "Root Directory" を変更しない。
 11. "Environment variables" は、">" をクリックし、"Add variable" をクリックします。そして以下の情報を入力します:
-    - `NODE_VERSION=20.1`
+    - `NODE_VERSION=22`
     - `NEXT_TELEMETRY_DISABLE=1`
     - `OPENAI_API_KEY=your_own_API_key`
     - `YARN_VERSION=1.22.19`

@@ -19,7 +19,7 @@
 10. 不要修改 "Root Directory"。
 11. 对于 "Environment variables"，点击 ">" 然后点击 "Add variable"。按照以下信息填写：
 
-    - `NODE_VERSION=20.1`
+    - `NODE_VERSION=22`
     - `NEXT_TELEMETRY_DISABLE=1`
     - `OPENAI_API_KEY=你自己的API Key`
     - `YARN_VERSION=1.22.19`

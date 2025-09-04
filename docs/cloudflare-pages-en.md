@@ -19,7 +19,7 @@ Fork this project on GitHub, then log in to dash.cloudflare.com and go to Pages.
 10. Do not modify "Root Directory".
 11. For "Environment variables", click ">" and then "Add variable". Fill in the following information:
 
-    - `NODE_VERSION=20.1`
+    - `NODE_VERSION=22`
     - `NEXT_TELEMETRY_DISABLE=1`
     - `OPENAI_API_KEY=your_own_API_key`
     - `YARN_VERSION=1.22.19`

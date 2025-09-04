@@ -18,7 +18,7 @@
 10. "루트 디렉토리"는 수정하지 마십시오.
 11. "환경 변수"의 경우 ">"를 클릭한 다음 "변수 추가"를 클릭합니다. 다음에 따라 정보를 입력합니다:
 
-    - node_version=20.1`.
+    - `NODE_VERSION=22`
     - next_telemetry_disable=1`.
     - `OPENAI_API_KEY=자신의 API 키`
     - ``yarn_version=1.22.19``
