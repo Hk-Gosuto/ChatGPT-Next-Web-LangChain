@@ -301,7 +301,6 @@ export class ChatGPTApi implements LLMApi {
         // Please do not ask me why not send max_tokens, no reason, this param is just shit, I dont want to explain anymore.
       };
 
-
       // add max_tokens to vision model
       // O系列 使用 max_completion_tokens 控制token数 (https://platform.openai.com/docs/guides/reasoning#controlling-costs)
       if (visionModel) {
@@ -752,6 +751,13 @@ export class ChatGPTApi implements LLMApi {
     });
 
     const resJson = (await res.json()) as OpenAIListModelResponse;
+
+    // 检查响应数据是否有效
+    if (!resJson.data || !Array.isArray(resJson.data)) {
+      console.warn("[Models] Invalid response from OpenAI API:", resJson);
+      return [];
+    }
+
     // const chatModels = resJson.data?.filter(
     //   (m) => m.id.startsWith("gpt-") || m.id.startsWith("chatgpt-"),
     // );

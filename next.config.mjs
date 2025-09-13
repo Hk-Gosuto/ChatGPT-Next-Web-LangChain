@@ -15,11 +15,11 @@ const nextConfig = {
     });
     config.module.rules.push({
       test: /\.(glsl|vs|fs|vert|frag)$/,
-      use: ["raw-loader"]
+      use: ["raw-loader"],
     });
     if (disableChunk) {
       config.plugins.push(
-        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
+        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
       );
     }
 
@@ -36,6 +36,7 @@ const nextConfig = {
   experimental: {
     forceSwcTransforms: true,
   },
+  transpilePackages: ["@lobehub/icons"],
 };
 
 const CorsHeaders = [

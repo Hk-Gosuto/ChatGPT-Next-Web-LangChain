@@ -116,7 +116,7 @@ export function RealtimeConfigList(props: {
             subTitle={Locale.Settings.Realtime.ApiKey.SubTitle}
           >
             <PasswordInput
-              aria={Locale.Settings.ShowPassword}
+              ariaLabel={Locale.Settings.ShowPassword}
               aria-label={Locale.Settings.Realtime.ApiKey.Title}
               value={props.realtimeConfig.apiKey}
               type="text"
@@ -153,7 +153,7 @@ export function RealtimeConfigList(props: {
             subTitle={Locale.Settings.Realtime.Temperature.SubTitle}
           >
             <InputRange
-              aria={Locale.Settings.Temperature.Title}
+              ariaLabel={Locale.Settings.Temperature.Title}
               value={props.realtimeConfig?.temperature?.toFixed(1)}
               min="0.6"
               max="1"

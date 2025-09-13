@@ -330,3 +330,225 @@
     background-color: var(--gray-50);
   }
 }
+
+// ModelSelectorModal 样式
+.model-selector-container {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; // 防止容器本身产生滚动条
+}
+
+// 为 ModelSelectorModal 专门设置的模态框内容样式，覆盖默认的 modal-content
+.model-selector-modal {
+  .modal-content {
+    max-height: unset !important;
+    overflow: visible !important;
+    height: 100%;
+  }
+}
+
+.model-selector-search {
+  margin-bottom: 16px;
+  position: relative;
+
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+  }
+
+  .clear-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+  }
+
+  .search-input {
+    text-align: left;
+    padding-left: 35px;
+    padding-right: 35px;
+    outline: none;
+    width: 100% !important;
+    max-width: 100% !important; // 强制覆盖全局样式的
+  }
+
+  .search-input:focus {
+    border: 1px solid var(--primary);
+  }
+}
+
+.model-selector-content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: 16px;
+}
+
+.model-selector-providers {
+  flex: 0 0 200px;
+  border-right: 1px solid var(--border-in-light);
+  padding-right: 16px;
+  overflow-y: auto;
+}
+
+.model-selector-provider {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  /* 移除 transition 动画 */
+
+  &:hover:not(.model-selector-provider-active) {
+    background-color: var(--hover-color);
+  }
+
+  &-active {
+    background-color: var(--primary);
+    color: white;
+
+    .model-selector-provider-name {
+      color: white;
+    }
+
+    .model-selector-provider-text {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  &-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    border-radius: 4px;
+    object-fit: contain;
+
+    &-placeholder {
+      width: 24px;
+      height: 24px;
+      margin-right: 12px;
+      border-radius: 4px;
+      background-color: var(--gray);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+
+  &-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--black);
+  }
+
+  /* 为"全部"添加特殊文本样式 */
+  &-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    border-radius: 4px;
+    background-color: var(--gray-light);
+    font-size: 10px;
+  }
+}
+
+.model-selector-models {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.model-selector-model {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  /* 移除 transition 动画 */
+
+  &:hover:not(.model-selector-model-selected) {
+    background-color: var(--hover-color);
+  }
+
+  &-selected {
+    background-color: var(--primary);
+    color: white;
+
+    .model-selector-model-name {
+      color: white;
+    }
+  }
+
+  &-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    border-radius: 3px;
+    object-fit: contain;
+
+    &-placeholder {
+      width: 20px;
+      height: 20px;
+      margin-right: 12px;
+      border-radius: 3px;
+      background-color: var(--gray);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+    }
+  }
+
+  &-name {
+    font-size: 14px;
+    color: var(--black);
+    word-break: break-word;
+  }
+}
+
+// 响应式设计
+@media screen and (max-width: 768px) {
+  .model-selector-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .model-selector-providers {
+    flex: none;
+    border-right: none;
+    border-bottom: 1px solid var(--border-in-light);
+    padding-right: 0;
+    padding-bottom: 12px;
+    max-height: 200px;
+  }
+
+  .model-selector-provider {
+    padding: 8px 12px;
+    margin-bottom: 4px;
+  }
+
+  .model-selector-model {
+    padding: 10px 12px;
+  }
+}

@@ -254,7 +254,7 @@ function DangerItems() {
         subTitle={Locale.Settings.Danger.Reset.SubTitle}
       >
         <IconButton
-          aria={Locale.Settings.Danger.Reset.Title}
+          ariaLabel={Locale.Settings.Danger.Reset.Title}
           text={Locale.Settings.Danger.Reset.Action}
           onClick={async () => {
             if (await showConfirm(Locale.Settings.Danger.Reset.Confirm)) {
@@ -269,7 +269,7 @@ function DangerItems() {
         subTitle={Locale.Settings.Danger.Clear.SubTitle}
       >
         <IconButton
-          aria={Locale.Settings.Danger.Clear.Title}
+          ariaLabel={Locale.Settings.Danger.Clear.Title}
           text={Locale.Settings.Danger.Clear.Action}
           onClick={async () => {
             if (await showConfirm(Locale.Settings.Danger.Clear.Confirm)) {
@@ -523,7 +523,7 @@ function SyncItems() {
         >
           <div style={{ display: "flex" }}>
             <IconButton
-              aria={Locale.Settings.Sync.CloudState + Locale.UI.Config}
+              ariaLabel={Locale.Settings.Sync.CloudState + Locale.UI.Config}
               icon={<ConfigIcon />}
               text={Locale.UI.Config}
               onClick={() => {
@@ -554,7 +554,7 @@ function SyncItems() {
         >
           <div style={{ display: "flex" }}>
             <IconButton
-              aria={Locale.Settings.Sync.LocalState + Locale.UI.Export}
+              ariaLabel={Locale.Settings.Sync.LocalState + Locale.UI.Export}
               icon={<UploadIcon />}
               text={Locale.UI.Export}
               onClick={() => {
@@ -562,7 +562,7 @@ function SyncItems() {
               }}
             />
             <IconButton
-              aria={Locale.Settings.Sync.LocalState + Locale.UI.Import}
+              ariaLabel={Locale.Settings.Sync.LocalState + Locale.UI.Import}
               icon={<DownloadIcon />}
               text={Locale.UI.Import}
               onClick={() => {
@@ -736,7 +736,7 @@ export function Settings() {
         subTitle={Locale.Settings.Access.OpenAI.ApiKey.SubTitle}
       >
         <PasswordInput
-          aria={Locale.Settings.ShowPassword}
+          ariaLabel={Locale.Settings.ShowPassword}
           aria-label={Locale.Settings.Access.OpenAI.ApiKey.Title}
           value={accessStore.openaiApiKey}
           type="text"
@@ -1450,7 +1450,7 @@ export function Settings() {
           <div className="window-action-button"></div>
           <div className="window-action-button">
             <IconButton
-              aria={Locale.UI.Close}
+              ariaLabel={Locale.UI.Close}
               icon={<CloseIcon />}
               onClick={() => navigate(Path.Home)}
               bordered
@@ -1577,7 +1577,7 @@ export function Settings() {
             subTitle={Locale.Settings.FontSize.SubTitle}
           >
             <InputRange
-              aria={Locale.Settings.FontSize.Title}
+              ariaLabel={Locale.Settings.FontSize.Title}
               title={`${config.fontSize ?? 14}px`}
               value={config.fontSize}
               min="12"
@@ -1746,7 +1746,9 @@ export function Settings() {
             )}
           >
             <IconButton
-              aria={Locale.Settings.Prompt.List + Locale.Settings.Prompt.Edit}
+              ariaLabel={
+                Locale.Settings.Prompt.List + Locale.Settings.Prompt.Edit
+              }
               icon={<EditIcon />}
               text={Locale.Settings.Prompt.Edit}
               onClick={() => setShowPromptModal(true)}

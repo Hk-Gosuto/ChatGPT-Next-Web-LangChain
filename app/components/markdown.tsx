@@ -142,7 +142,7 @@ export function PreCode(props: { children: any }) {
       renderArtifacts();
       return () => observer.disconnect();
     }
-  }, []);
+  }, [renderArtifacts]);
 
   return (
     <>
@@ -292,16 +292,18 @@ function MarkDownContent(props: {
   return (
     <ReactMarkdown
       remarkPlugins={[RemarkMath, RemarkGfm, RemarkBreaks]}
-      rehypePlugins={[
-        RehypeKatex,
+      rehypePlugins={
         [
-          RehypeHighlight,
-          {
-            detect: false,
-            ignoreMissing: true,
-          },
-        ],
-      ]}
+          RehypeKatex as any,
+          [
+            RehypeHighlight as any,
+            {
+              detect: false,
+              ignoreMissing: true,
+            },
+          ],
+        ] as any
+      }
       components={{
         pre: PreCode,
         code: CustomCode,

@@ -779,6 +779,12 @@ const cn = {
     Topic: "主题",
     Time: "时间",
   },
+  ModelSelector: {
+    Title: "选择模型",
+    SearchPlaceholder: "搜索模型...",
+    AllModels: "全部",
+    OtherModels: "其它",
+  },
 };
 
 type DeepPartial<T> = T extends object

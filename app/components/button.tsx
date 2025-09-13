@@ -21,7 +21,7 @@ export function IconButton(props: {
   autoFocus?: boolean;
   loding?: boolean;
   style?: CSSProperties;
-  aria?: string;
+  ariaLabel?: string;
 }) {
   return (
     <button
@@ -38,7 +38,7 @@ export function IconButton(props: {
       tabIndex={props.tabIndex}
       autoFocus={props.autoFocus}
       style={props.style}
-      aria-label={props.aria}
+      aria-label={props.ariaLabel}
     >
       {props.icon && !props.loding && (
         <div

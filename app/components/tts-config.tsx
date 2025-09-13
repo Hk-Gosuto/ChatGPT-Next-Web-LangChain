@@ -111,7 +111,7 @@ export function TTSConfigList(props: {
             subTitle={Locale.Settings.TTS.Speed.SubTitle}
           >
             <InputRange
-              aria={Locale.Settings.TTS.Speed.Title}
+              ariaLabel={Locale.Settings.TTS.Speed.Title}
               value={props.ttsConfig.speed?.toFixed(1)}
               min="0.3"
               max="4.0"
