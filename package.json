@@ -62,7 +62,7 @@
     "mermaid": "^10.6.1",
     "mime": "^4.0.1",
     "nanoid": "^5.0.3",
-    "next": "^15.5.2",
+    "next": "15.5.9",
     "node-fetch": "^3.3.1",
     "officeparser": "^4.0.8",
     "openapi-client-axios": "^7.5.5",
