@@ -1,4 +1,3 @@
-export const runtime = 'edge';
 import { NextRequest, NextResponse } from "next/server";
 import { AgentApi, RequestBody, ResponseBody } from "../agentapi";
 import { auth } from "@/app/api/auth";
@@ -93,7 +92,7 @@ export const GET = handle;
 export const POST = handle;
 
 export const maxDuration = 60;
-export const runtime = "nodejs";
+export const runtime = "edge";
 export const preferredRegion = [
   "arn1",
   "bom1",
