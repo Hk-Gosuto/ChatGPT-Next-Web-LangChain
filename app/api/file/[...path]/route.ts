@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import { getServerSideConfig } from "@/app/config/server";
 import LocalFileStorage from "@/app/utils/local_file_storage";
 import S3FileStorage from "@/app/utils/s3_file_storage";
