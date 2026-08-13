@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import { NextRequest, NextResponse } from "next/server";
 import { ModelProvider } from "@/app/constant";
 import { auth } from "@/app/api/auth";
