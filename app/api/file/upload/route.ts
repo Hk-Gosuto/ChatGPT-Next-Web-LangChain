@@ -1,4 +1,3 @@
-export const runtime = 'edge';
 import { NextRequest, NextResponse } from "next/server";
 import { ModelProvider } from "@/app/constant";
 import { auth } from "@/app/api/auth";
@@ -60,4 +59,4 @@ async function handle(req: NextRequest) {
 
 export const POST = handle;
 
-export const runtime = "nodejs";
+export const runtime = "edge";
